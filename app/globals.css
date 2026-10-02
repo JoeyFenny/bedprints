@@ -1,38 +1,42 @@
-:root { color: #141414; background: #f6f4f1; font-family: Inter, system-ui, sans-serif; }
+:root { color: #000000; background: #ffffff; font-family: Inter, system-ui, sans-serif; }
 * { box-sizing: border-box; }
 body { margin: 0; }
 a { color: inherit; }
-.announce { background: #141414; color: #f6f4f1; text-align: center; font-size: 12px; letter-spacing: .04em; padding: 8px 16px; }
-.top { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; border-bottom: 1px solid #e4dfd8; position: sticky; top: 0; background: #f6f4f1; }
+.announce { background: #000000; color: #d8c48a; text-align: center; font-size: 12px; letter-spacing: .04em; padding: 8px 16px; }
+.top { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; border-bottom: 1px solid #e6e6e6; position: sticky; top: 0; background: #ffffff; }
 .logo { font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; }
 nav { display: flex; gap: 18px; }
 nav a { text-decoration: none; font-size: 14px; }
 main { max-width: 1100px; margin: 0 auto; padding: 28px; }
 .hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; padding: 24px 0 48px; }
 .hero h1, .page-title { font-size: 48px; line-height: 1.05; margin: 8px 0 12px; letter-spacing: -.03em; }
-.lede, .blurb, .note { color: #5c564e; }
-.kicker { text-transform: uppercase; letter-spacing: .16em; font-size: 12px; color: #8a8176; }
-.btn { display: inline-block; background: #141414; color: #fff; text-decoration: none; border: 0; padding: 12px 18px; border-radius: 999px; font-weight: 600; cursor: pointer; }
-.btn.ghost { background: transparent; color: #141414; border: 1px solid #141414; }
-.hero-card img, .card img, .product img, .bag img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #ece7e1; border-radius: 12px; }
+.lede, .blurb, .note { color: #444444; }
+.kicker { text-transform: uppercase; letter-spacing: .16em; font-size: 12px; color: #a68a4b; }
+.btn { display: inline-block; background: #000000; color: #fff; text-decoration: none; border: 0; padding: 12px 18px; border-radius: 999px; font-weight: 600; cursor: pointer; }
+.btn.ghost { background: transparent; color: #000000; border: 1px solid #000000; }
+.hero-card img, .card img, .product img, .bag img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f2f0ea; border-radius: 12px; }
 .hero-card, .card { text-decoration: none; }
 .hero-card div, .card-meta { display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px; }
 .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .gallery { display: grid; gap: 12px; align-content: start; }
 .product { display: grid; align-items: start; grid-template-columns: 1.1fr .9fr; gap: 36px; }
 .price { font-size: 22px; font-weight: 650; }
-.price s { margin-left: 8px; color: #8a8176; font-size: 16px; }
+.price s { margin-left: 8px; color: #a68a4b; font-size: 16px; }
 .options { display: flex; gap: 8px; margin: 16px 0; }
-.options button, .qty input, .bag input { border: 1px solid #d9d2c8; background: #fff; border-radius: 8px; padding: 8px 12px; }
-.options button.on { border-color: #141414; }
+.options button, .qty input, .bag input { border: 1px solid #cfcfcf; background: #fff; border-radius: 8px; padding: 8px 12px; }
+.options button.on { border-color: #000000; }
 .actions { display: flex; gap: 10px; margin-top: 16px; }
 .bag { list-style: none; padding: 0; display: grid; gap: 16px; }
 .bag li { display: grid; grid-template-columns: 96px 1fr auto; gap: 14px; align-items: center; }
 .bag img { width: 96px; height: 96px; }
 .bag-side { display: grid; gap: 8px; justify-items: end; }
-.total { margin-top: 24px; border-top: 1px solid #e4dfd8; padding-top: 16px; }
-footer { display: flex; justify-content: space-between; padding: 28px; color: #8a8176; font-size: 12px; border-top: 1px solid #e4dfd8; }
+.total { margin-top: 24px; border-top: 1px solid #e6e6e6; padding-top: 16px; }
+footer { display: flex; justify-content: space-between; padding: 28px; color: #a68a4b; font-size: 12px; border-top: 1px solid #e6e6e6; }
 @media (max-width: 800px) {
   .hero, .product, .grid { grid-template-columns: 1fr; }
   .hero h1 { font-size: 34px; }
 }
+
+.btn:hover { background: #c8b273; color: #000; }
+.logo { border-bottom: 3px solid #c8b273; padding-bottom: 2px; }
+.options button.on { background: #f2e9cf; }

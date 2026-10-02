@@ -3,7 +3,7 @@
 Rules for AI agents working on this repo. Keep it short, follow it exactly. Full details in README.md.
 
 ## What this is
-Bedprints: bamboo bedding store. Static Next.js 15 site (`output:'export'`, `trailingSlash:true`) on Cloudflare Pages + one Pages Function (`functions/api/checkout.js`) that creates Stripe Checkout Sessions. No Stripe SDK, no database.
+BedPrince: bamboo bedding store. Static Next.js 15 site (`output:'export'`, `trailingSlash:true`) on Cloudflare Pages + one Pages Function (`functions/api/checkout.js`) that creates Stripe Checkout Sessions. No Stripe SDK, no database.
 
 ## Files that matter
 - `lib/store.js`: store info and **all products** (slug, name, price in integer cents, options, images). Single source of truth for prices.

@@ -1,4 +1,4 @@
-# Bedprints
+# BedPrince
 
 Bamboo bedding that sleeps cool. This store (concept brand: Bed Prince) was created from the [ecom-template](https://github.com/JoeyFenny/ecom-template) starter.
 

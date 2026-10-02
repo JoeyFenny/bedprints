@@ -61,7 +61,7 @@ export function buildSession(lines, origin, env = {}) {
   });
   // Stripe metadata values max 500 chars; keep the cart summary short.
   p.set('metadata[cart]', lines.map((l) => `${l.product.slug}:${l.option}:${l.qty}`).join(',').slice(0, 500));
-  p.set('metadata[source]', 'bedprints');
+  p.set('metadata[source]', 'bedprince');
   if (String(env.COLLECT_SHIPPING_US || '').toLowerCase() === 'true' || env.COLLECT_SHIPPING_US === '1') {
     p.set('shipping_address_collection[allowed_countries][0]', 'US');
   }

@@ -12,10 +12,10 @@ async function page(path) {
   return { status: res.status, html, robots: res.headers.get('x-robots-tag') || '' };
 }
 
-test('home is the Bedprints store and is indexable', opts, async () => {
+test('home is the BedPrince store and is indexable', opts, async () => {
   const home = await page('/');
   assert.equal(home.status, 200);
-  assert.match(home.html, /Bedprints/);
+  assert.match(home.html, /BedPrince/);
   assert.match(home.html, /Bamboo sheet set/);
   assert.match(home.html, /_next\/static/);
   assert.doesNotMatch(home.robots, /noindex/);

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import { store, products, money, findProduct } from '../lib/store.js';
 
 test('store branding', () => {
-  assert.equal(store.name, 'Bedprints');
+  assert.equal(store.name, 'BedPrince');
   assert.equal(store.tagline, 'Bamboo bedding that sleeps cool.');
 });
 

@@ -3,9 +3,9 @@ import Header from '../components/Header';
 import { store } from '../lib/store';
 
 export const metadata = {
-  title: { default: 'Bedprints — Bamboo bedding that sleeps cool', template: '%s — Bedprints' },
-  description: 'Bedprints makes silky, breathable bamboo bedding: sheet sets, pillowcases, duvet covers, pillows and blankets that sleep cool.',
-  openGraph: { title: 'Bedprints', description: store.tagline, siteName: 'Bedprints', type: 'website' },
+  title: { default: 'BedPrince — Bamboo bedding that sleeps cool', template: '%s — BedPrince' },
+  description: 'BedPrince makes silky, breathable bamboo bedding: sheet sets, pillowcases, duvet covers, pillows and blankets that sleep cool.',
+  openGraph: { title: 'BedPrince', description: store.tagline, siteName: 'BedPrince', type: 'website' },
   robots: { index: true, follow: true },
 };
 
