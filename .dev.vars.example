@@ -1,0 +1,7 @@
+# Copy to .dev.vars (gitignored) for `npx wrangler pages dev out`.
+# In production this is set in Cloudflare Pages > Settings > Variables and Secrets, never committed.
+# Use a TEST key (sk_test_...) for local dev and Preview; sk_live_... only in Production.
+STRIPE_SECRET_KEY=sk_live_...
+
+# Optional: set to true to collect a US shipping address at checkout.
+# COLLECT_SHIPPING_US=true
