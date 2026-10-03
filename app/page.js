@@ -1,30 +1,57 @@
 import Link from 'next/link';
-import { products, store, money } from '../lib/store';
+import { products } from '../lib/store';
+import { faqs } from '../lib/content';
+import { pageMeta } from '../lib/seo';
+import ProductCard from '../components/ProductCard';
+import FaqList from '../components/FaqList';
+import SampleReviews from '../components/SampleReviews';
+import Hero from '../components/home/Hero';
+import TrustBar from '../components/home/TrustBar';
+import CategoryTiles from '../components/home/CategoryTiles';
+import WhyBamboo from '../components/home/WhyBamboo';
+import BundleBanner from '../components/home/BundleBanner';
+import EmailCapture from '../components/home/EmailCapture';
+
+export const metadata = pageMeta({
+  title: undefined,
+  description: 'Silky, breathable bamboo bedding that sleeps cool: sheet sets, pillowcases, duvet covers, pillows and blankets. Free US shipping over $75 and a 30-night sleep trial.',
+  path: '/',
+});
+metadata.title = { absolute: 'BedPrince — Bamboo bedding that sleeps cool' };
 
 export default function Home() {
-  const hero = products[0];
+  const best = products.filter((p) => p.bestSeller).slice(0, 4);
   return (
     <main>
-      <section className="hero">
-        <div>
-          <p className="kicker">Bamboo bedding</p>
-          <h1>{store.tagline}</h1>
-          <p className="lede">Silky sheets, pillows and blankets made from breathable bamboo. Naturally cooler, softer with every wash.</p>
-          <Link className="btn" href="/products">Shop all</Link>
+      <Hero />
+      <TrustBar />
+      <section className="section" aria-labelledby="best-h">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <p className="kicker">Best sellers</p>
+              <h2 id="best-h" className="h2">Start with the essentials</h2>
+            </div>
+            <Link href="/shop/" className="link-arrow">Shop all</Link>
+          </div>
+          <div className="grid grid-4">
+            {best.map((p) => <ProductCard key={p.slug} product={p} />)}
+          </div>
         </div>
-        <Link href={`/products/${hero.slug}`} className="hero-card">
-          <img src={hero.images[0]} alt={hero.name} />
-          <div><strong>{hero.name}</strong><span>{money(hero.price)}</span></div>
-        </Link>
       </section>
-      <section className="grid">
-        {products.map((p) => (
-          <Link key={p.slug} href={`/products/${p.slug}`} className="card">
-            <img src={p.images[0]} alt="" />
-            <div className="card-meta"><span>{p.name}</span><span>{money(p.price)}</span></div>
-          </Link>
-        ))}
+      <CategoryTiles />
+      <WhyBamboo />
+      <BundleBanner />
+      <SampleReviews heading="Reviews, coming soon" />
+      <section className="section" aria-labelledby="faq-h">
+        <div className="container narrow-lg">
+          <p className="kicker">Questions</p>
+          <h2 id="faq-h" className="h2">Frequently asked</h2>
+          <FaqList items={faqs.slice(0, 5)} />
+          <p className="center"><Link href="/faq/" className="link-arrow">See all FAQs</Link></p>
+        </div>
       </section>
+      <EmailCapture />
     </main>
   );
 }

@@ -44,8 +44,13 @@ export function validateItems(items, catalog = products) {
   return { lines };
 }
 
+// Optional order note from the cart page: plain text, max 400 chars, stored in Stripe session metadata.
+export function cleanNote(raw) {
+  return typeof raw === 'string' ? raw.replace(/[\u0000-\u001f]+/g, ' ').trim().slice(0, 400) : '';
+}
+
 // Builds the form-encoded body for Stripe. Pure function, unit tested.
-export function buildSession(lines, origin, env = {}) {
+export function buildSession(lines, origin, env = {}, note = '') {
   const p = new URLSearchParams();
   p.set('mode', 'payment');
   p.set('success_url', `${origin}/success/?session_id={CHECKOUT_SESSION_ID}`);
@@ -62,6 +67,7 @@ export function buildSession(lines, origin, env = {}) {
   // Stripe metadata values max 500 chars; keep the cart summary short.
   p.set('metadata[cart]', lines.map((l) => `${l.product.slug}:${l.option}:${l.qty}`).join(',').slice(0, 500));
   p.set('metadata[source]', 'bedprince');
+  if (note) p.set('metadata[note]', note);
   if (String(env.COLLECT_SHIPPING_US || '').toLowerCase() === 'true' || env.COLLECT_SHIPPING_US === '1') {
     p.set('shipping_address_collection[allowed_countries][0]', 'US');
   }
@@ -84,7 +90,7 @@ export async function handleCheckout(request, env = {}, fetchImpl = fetch) {
     res = await fetchImpl(STRIPE_URL, {
       method: 'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: buildSession(result.lines, origin, env).toString(),
+      body: buildSession(result.lines, origin, env, cleanNote(body && body.note)).toString(),
     });
   } catch {
     return json({ error: 'Could not reach Stripe. Try again.' }, 502);
