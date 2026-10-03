@@ -1,17 +1,8 @@
-'use client';
+import SuccessView from '../../components/SuccessView';
+import { pageMeta } from '../../lib/seo';
 
-import Link from 'next/link';
-import { useEffect } from 'react';
-import { clearCart } from '../../lib/cart';
+export const metadata = pageMeta({ title: 'Order confirmed', description: 'Thank you for your BedPrince order.', path: '/success/', noindex: true });
 
 export default function Success() {
-  useEffect(() => { clearCart(); }, []);
-  return (
-    <main>
-      <p className="kicker">Order</p>
-      <h1>Payment received.</h1>
-      <p>Thank you for your order. A receipt is on its way to your inbox, and we will email you when your bedding ships.</p>
-      <Link className="btn" href="/products">Back to shop</Link>
-    </main>
-  );
+  return <SuccessView />;
 }

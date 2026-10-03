@@ -1,27 +1,61 @@
 import { notFound } from 'next/navigation';
-import { findProduct, products } from '../../../lib/store';
+import { findProduct, products, categoryOf } from '../../../lib/store';
+import { pageMeta, productLd, breadcrumbLd } from '../../../lib/seo';
 import BuyBox from '../../../components/BuyBox';
+import Gallery from '../../../components/Gallery';
+import Breadcrumbs from '../../../components/Breadcrumbs';
+import ProductDetails from '../../../components/ProductDetails';
+import ProductCard from '../../../components/ProductCard';
+import RecentlyViewed from '../../../components/RecentlyViewed';
+import SampleReviews from '../../../components/SampleReviews';
+import JsonLd from '../../../components/JsonLd';
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }) {
-  const product = findProduct(params.slug);
-  return product ? { title: product.name, description: product.blurb, openGraph: { title: product.name, description: product.blurb, images: product.images.slice(0, 1) } } : { title: 'Not found' };
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const p = findProduct(slug);
+  if (!p) return { title: 'Not found' };
+  return pageMeta({ title: p.name, description: p.blurb + ' ' + p.highlights[0] + '.', path: `/products/${p.slug}/`, image: p.images[0], type: 'website' });
 }
 
-export default function ProductPage({ params }) {
-  const product = findProduct(params.slug);
+export default async function ProductPage({ params }) {
+  const { slug } = await params;
+  const product = findProduct(slug);
   if (!product) notFound();
+  const cat = categoryOf(product.categories[0]);
+  const trail = [
+    { name: 'Home', path: '/' },
+    { name: 'Shop', path: '/shop/' },
+    { name: cat.name, path: `/collections/${cat.slug}/` },
+    { name: product.name, path: `/products/${product.slug}/` },
+  ];
+  const pairs = product.pairsWith.map(findProduct).filter(Boolean);
   return (
-    <main className="product">
-      <div className="gallery">
-        {product.images.map((src, i) => (
-          <img key={src} src={src} alt={i === 0 ? product.name : `${product.name}, detail ${i}`} />
-        ))}
+    <main>
+      <div className="container">
+        <Breadcrumbs trail={trail} />
+        <div className="product">
+          <Gallery images={product.images} name={product.name} />
+          <div>
+            <BuyBox product={product} />
+            <ProductDetails product={product} />
+          </div>
+        </div>
       </div>
-      <BuyBox product={product} />
+      <section className="section tinted" aria-labelledby="set-h">
+        <div className="container">
+          <p className="kicker">Complete the set</p>
+          <h2 id="set-h" className="h2">Pairs well with</h2>
+          <div className="grid grid-3">{pairs.map((p) => <ProductCard key={p.slug} product={p} />)}</div>
+        </div>
+      </section>
+      <SampleReviews heading="Reviews are coming soon" />
+      <RecentlyViewed slug={product.slug} />
+      <JsonLd data={productLd(product)} />
+      <JsonLd data={breadcrumbLd(trail)} />
     </main>
   );
 }

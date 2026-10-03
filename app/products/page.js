@@ -1,21 +1,15 @@
 import Link from 'next/link';
-import { products, money } from '../../lib/store';
+import { pageMeta } from '../../lib/seo';
 
-export const metadata = { title: 'Shop bamboo bedding' };
+// Legacy URL: the shop lives at /shop/. A static export cannot send a 301, so this page declares /shop/ as
+// canonical and refreshes visitors there; public/_redirects adds a real 301 on Cloudflare Pages.
+export const metadata = pageMeta({ title: 'Shop bamboo bedding', description: 'Shop BedPrince bamboo bedding.', path: '/shop/' });
 
-export default function Catalog() {
+export default function ProductsIndex() {
   return (
-    <main>
-      <h1 className="page-title">Shop</h1>
-      <section className="grid">
-        {products.map((p) => (
-          <Link key={p.slug} href={`/products/${p.slug}`} className="card">
-            <img src={p.images[0]} alt="" />
-            <div className="card-meta"><span>{p.name}</span><span>{money(p.price)}</span></div>
-            <p className="blurb">{p.blurb}</p>
-          </Link>
-        ))}
-      </section>
+    <main className="container narrow center page-pad">
+      <meta httpEquiv="refresh" content="0; url=/shop/" />
+      <p className="lede">Taking you to the <Link href="/shop/">shop</Link>…</p>
     </main>
   );
 }

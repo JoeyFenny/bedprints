@@ -10,7 +10,7 @@ import ShippingProgress from './ShippingProgress';
 
 // Subtotal + checkout button + friendly multi-product fallback. Used by the cart page and the drawer.
 // Renders the line list itself so it can attach per-line "Buy this item" buttons after a multi-product failure.
-export default function CheckoutPanel({ items, subtotal, onNavigate, compact = false, showViewBag = false }) {
+export default function CheckoutPanel({ items, subtotal, onNavigate, compact = false, showViewBag = false, children = null }) {
   const [busy, setBusy] = useState(false);
   const [busyKey, setBusyKey] = useState('');
   const [error, setError] = useState('');
@@ -44,6 +44,7 @@ export default function CheckoutPanel({ items, subtotal, onNavigate, compact = f
     <>
       <div className="bag-scroll">
         <BagLines items={items} compact={compact} onNavigate={onNavigate} onBuyLine={perLine && items.length > 1 ? buyLine : undefined} busyKey={busyKey} />
+        {children}
       </div>
       <div className="bag-foot">
         <ShippingProgress subtotal={subtotal} />

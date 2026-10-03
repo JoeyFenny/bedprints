@@ -1,17 +1,45 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { money } from '../lib/store';
-import { addItem } from '../lib/cart';
+import { useEffect, useRef, useState } from 'react';
+import { money, store } from '../lib/store';
+import { addItem, openCart } from '../lib/cart';
 import { redirectToCheckout } from '../lib/checkout';
+import Price from './Price';
+import QtyStepper from './QtyStepper';
+import Icon from './Icons';
+
+const SIZE_GUIDES = { sheets: true, duvet: true, pillow: true };
 
 export default function BuyBox({ product }) {
   const [option, setOption] = useState(product.options[0]);
   const [qty, setQty] = useState(1);
-  const [added, setAdded] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [added, setAdded] = useState(false);
+  const [stuck, setStuck] = useState(false);
+  const actions = useRef(null);
+  const multi = product.options.length > 1;
+
+  // Sticky mobile bar appears once the main buttons scroll out of view.
+  useEffect(() => {
+    const el = actions.current;
+    if (!el || !('IntersectionObserver' in window)) return undefined;
+    const io = new IntersectionObserver(([e]) => {
+      const gone = !e.isIntersecting && e.boundingClientRect.top < 0;
+      setStuck(gone);
+      document.body.classList.toggle('has-sticky-atc', gone);
+    });
+    io.observe(el);
+    return () => { io.disconnect(); document.body.classList.remove('has-sticky-atc'); };
+  }, []);
+
+  function add() {
+    addItem(product, option, qty);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2500);
+    openCart();
+  }
   async function buyNow() {
     setBusy(true);
     setError('');
@@ -22,24 +50,51 @@ export default function BuyBox({ product }) {
       setBusy(false);
     }
   }
+
   return (
-    <div>
-      {product.badge ? <p className="kicker">{product.badge}</p> : null}
+    <div className="buybox">
+      {product.badge ? <span className="badge">{product.badge}</span> : null}
       <h1>{product.name}</h1>
-      <p className="price">{money(product.price)}{product.compareAt ? <s>{money(product.compareAt)}</s> : null}</p>
-      <p>{product.description}</p>
-      <div className="options">
-        {product.options.map((o) => (
-          <button key={o} type="button" className={o === option ? 'on' : ''} onClick={() => setOption(o)}>{o}</button>
-        ))}
+      <Price product={product} size="lg" />
+      <p className="lede">{product.description}</p>
+
+      {multi ? (
+        <>
+          <div className="opt-label" id="opt-label">
+            <span>{product.sizeGuide === 'pillow' ? 'Size' : product.slug.includes('throw') ? 'Color' : 'Size'}: <span className="opt-current">{option}</span></span>
+            {SIZE_GUIDES[product.sizeGuide] ? <Link href="/size-guide/">Size guide</Link> : null}
+          </div>
+          <div className="options" role="group" aria-labelledby="opt-label">
+            {product.options.map((o) => (
+              <button key={o} type="button" aria-pressed={o === option} onClick={() => setOption(o)}>{o}</button>
+            ))}
+          </div>
+        </>
+      ) : null}
+
+      <div className="buy-row" ref={actions}>
+        <QtyStepper value={qty} onChange={(q) => setQty(Math.max(1, q))} label="Quantity" />
+        <button type="button" className="btn btn-lg grow" onClick={add}>{added ? <><Icon name="check" size={18} /> Added to bag</> : `Add to bag · ${money(product.price * qty)}`}</button>
       </div>
-      <label className="qty">Qty <input type="number" min="1" max="10" value={qty} onChange={(e) => setQty(Number(e.target.value) || 1)} /></label>
-      <div className="actions">
-        <button type="button" className="btn" onClick={() => { addItem(product, option, qty); setAdded(true); }}>Add to bag</button>
-        <button type="button" className="btn ghost" disabled={busy} onClick={buyNow}>{busy ? 'Redirecting…' : 'Buy now'}</button>
+      <button type="button" className="btn btn-outline btn-lg btn-block" disabled={busy} onClick={buyNow}>{busy ? 'Redirecting to secure checkout…' : 'Buy now'}</button>
+      {error ? <p className="notice error" role="alert">{error}</p> : null}
+
+      <p className="shipinfo">
+        <span><strong>Free US shipping</strong> on orders over {money(store.freeShippingThreshold)}.</span>
+        <span><strong>{store.trialNights}-night sleep trial.</strong> See <Link href="/shipping-returns/">shipping &amp; returns</Link>.</span>
+      </p>
+
+      <ul className="perks" aria-label="Why you can buy with confidence">
+        <li><Icon name="truck" size={22} /> Free US shipping over $75</li>
+        <li><Icon name="moon" size={22} /> 30-night sleep trial</li>
+        <li><Icon name="wash" size={22} /> Machine washable</li>
+        <li><Icon name="lock" size={22} /> Secure checkout by Stripe</li>
+      </ul>
+
+      <div className={`sticky-atc${stuck ? ' show' : ''}`} aria-hidden={!stuck}>
+        <div className="sa-info"><span className="sa-name">{product.name}</span><span className="sa-sub">{multi ? `${option} · ` : ''}{money(product.price)}</span></div>
+        <button type="button" className="btn" tabIndex={stuck ? 0 : -1} onClick={add}>{added ? 'Added' : 'Add to bag'}</button>
       </div>
-      {added ? <p className="note">In the bag. <Link href="/cart">View bag</Link></p> : null}
-      {error ? <p className="note" role="alert">{error}</p> : null}
     </div>
   );
 }

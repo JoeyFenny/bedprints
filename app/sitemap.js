@@ -1,4 +1,4 @@
-import { products, categories, absoluteUrl } from '../lib/store';
+import { products, categories, absoluteUrl } from '../lib/store.js';
 
 export const dynamic = 'force-static';
 

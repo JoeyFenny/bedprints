@@ -343,8 +343,8 @@ ul, ol { margin: 0; padding: 0; }
 .bl-controls .stepper button { width: 32px; height: 34px; }
 .buy-line { margin-top: 10px; justify-self: start; }
 .bl-total { color: var(--ink); font-size: 15px; }
-.bag-summary, .bag-foot { background: var(--paper); border-radius: var(--radius-lg); padding: 24px; }
-.bag-summary { position: sticky; top: calc(var(--header-h) + 20px); }
+.bag-foot { background: var(--paper); border-radius: var(--radius-lg); padding: 24px; }
+.bag-page .bag-foot { position: sticky; top: calc(var(--header-h) + 20px); }
 .subtotal { display: flex; justify-content: space-between; font-size: 18px; margin: 14px 0 0; color: var(--ink); }
 .ship-progress p { font-size: 14px; margin: 0 0 8px; color: var(--ink); }
 .bar { height: 8px; background: #e2ded3; border-radius: 4px; overflow: hidden; }
@@ -390,7 +390,7 @@ ul, ol { margin: 0; padding: 0; }
   .pdp-gallery { position: static; grid-template-columns: 1fr; }
   .pdp-gallery .thumbs { grid-auto-flow: column; grid-auto-columns: 68px; order: 2; overflow-x: auto; }
   .bag-page { grid-template-columns: 1fr; gap: 24px; }
-  .bag-summary { position: static; }
+  .bag-page .bag-foot { position: static; }
   .cards-row { grid-template-columns: 1fr; }
   .sticky-atc { display: flex; }
   .site-footer { padding-bottom: 0; }
@@ -411,3 +411,8 @@ ul, ol { margin: 0; padding: 0; }
   .hero-cta .btn { width: 100%; }
   .bundle-items { grid-template-columns: repeat(3, 1fr); gap: 10px; }
 }
+.grow { flex: 1; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+.contact-form { background: var(--paper); border-radius: var(--radius-lg); padding: 28px; }
+.prose-wrap { padding-top: 40px; }
+@media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; gap: 32px; } }

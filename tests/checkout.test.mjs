@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { handleCheckout, validateItems, buildSession, onRequest, onRequestPost } from '../functions/api/checkout.js';
-import { toPayload, startCheckout } from '../lib/checkout.js';
+import { toPayload, startCheckout, paymentLinkFor, CheckoutError, ONE_AT_A_TIME } from '../lib/checkout.js';
 
 const ORIGIN = 'https://shop.example.com';
 const req = (body, raw) => new Request(`${ORIGIN}/api/checkout`, {
@@ -129,4 +129,42 @@ test('client helper sends only slug/option/qty and returns the url', async () =>
   assert.equal(await startCheckout([{ slug: 'a', option: 'b', qty: 1 }], ok), 'https://checkout.stripe.com/x');
   const bad = async () => new Response(JSON.stringify({ error: 'Cart is empty.' }), { status: 400 });
   await assert.rejects(startCheckout([], bad), /Cart is empty/);
+});
+
+test('missing server key surfaces the friendly one-at-a-time message, never the internal error', async () => {
+  const missing = async () => new Response(JSON.stringify({ error: 'Checkout is not configured: STRIPE_SECRET_KEY is missing.', code: 'missing_stripe_key' }), { status: 500 });
+  const items = [{ slug: 'bamboo-sheet-set', option: 'Queen', qty: 1 }, { slug: 'bamboo-pillow', option: 'Standard', qty: 1 }];
+  await assert.rejects(startCheckout(items, missing), (e) => e instanceof CheckoutError && e.code === 'one_at_a_time' && e.message === ONE_AT_A_TIME && !/STRIPE_SECRET_KEY/.test(e.message));
+  assert.match(ONE_AT_A_TIME, /one product at a time/);
+});
+
+test('per-line payment links: each product line has its own link; multi-line bags have none', () => {
+  const a = { slug: 'bamboo-sheet-set', option: 'Queen', qty: 2 };
+  const b = { slug: 'bamboo-pillow', option: 'King', qty: 1 };
+  const la = new URL(paymentLinkFor([a]));
+  const lb = new URL(paymentLinkFor([b]));
+  assert.equal(la.origin, 'https://buy.stripe.com');
+  assert.notEqual(la.pathname, lb.pathname);
+  assert.equal(la.searchParams.get('client_reference_id'), 'bamboo-sheet-set-Queen-2');
+  assert.equal(paymentLinkFor([a, b]), null);
+  assert.equal(paymentLinkFor([]), null);
+});
+
+test('single-line bag never calls the API (goes straight to the payment link)', async () => {
+  let called = false;
+  const spy = async () => { called = true; return new Response('{}'); };
+  const url = await startCheckout([{ slug: 'bamboo-pillow', option: 'Standard', qty: 1 }], spy);
+  assert.match(url, /^https:\/\/buy\.stripe\.com\//);
+  assert.equal(called, false);
+});
+
+test('order note: client sends trimmed note; server stores it in metadata and strips control chars', async () => {
+  assert.deepEqual(toPayload([{ slug: 'a', option: 'b', qty: 1 }], '  hello  ').note, 'hello');
+  assert.equal('note' in toPayload([{ slug: 'a', option: 'b', qty: 1 }], '   '), false);
+  const f = stripeOk();
+  await handleCheckout(req({ items: [{ slug: 'bamboo-sheet-set', option: 'Queen', qty: 1 }, { slug: 'bamboo-pillow', option: 'Standard', qty: 1 }], note: 'Gift\nfor Sam' }), env, f);
+  assert.equal(new URLSearchParams(f.calls[0].init.body).get('metadata[note]'), 'Gift for Sam');
+  const g = stripeOk();
+  await handleCheckout(req({ items: [{ slug: 'bamboo-sheet-set', option: 'Queen', qty: 1 }], note: 42 }), env, g);
+  assert.equal(new URLSearchParams(g.calls[0].init.body).get('metadata[note]'), null);
 });
