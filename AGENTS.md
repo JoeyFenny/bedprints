@@ -9,8 +9,11 @@ BedPrince: bamboo bedding store. Static Next.js 15 site (`output:'export'`, `tra
 - `lib/store.js`: store info and **all products** (slug, name, price in integer cents, options, images). Single source of truth for prices.
 - `functions/api/checkout.js`: POST `{items:[{slug,option,qty}]}` → validates against `lib/store.js` → Stripe `POST /v1/checkout/sessions` with `price_data` → returns `{url}`.
 - `lib/checkout.js`: browser helper that POSTs to `/api/checkout` and redirects.
-- `components/CartView.js`, `components/BuyBox.js`: Checkout / Buy now buttons.
-- `lib/cart.js`: cart in localStorage. `app/success/page.js` clears it.
+- `components/CheckoutPanel.js` (bag/drawer checkout + friendly multi-product fallback with per-line "Buy this item"), `components/BuyBox.js` (Add to bag / Buy now), `components/CartDrawer.js`, `components/CartView.js`.
+- `lib/cart.js`: cart in localStorage (+ order note, recently viewed). `components/SuccessView.js` clears it on `/success/`.
+- `lib/seo.js`: `pageMeta()` (canonical, OG, Twitter) and JSON-LD builders. Use `pageMeta()` on every new page; `lib/content.js` holds FAQ/benefits/sample reviews/size tables.
+- `app/globals.css`: the design system. Use its tokens (`--tan-ink` for tan text on white, `--tan` on black); no new CSS framework.
+- `docs/FEATURE_AUDIT.md`: per-page checklist and status; update it when you add or drop features.
 - `public/_headers`, `public/robots.txt`: site is public and indexable (no noindex). Do not re-add.
 - `public/images/`: product photos referenced as `/images/xxx.jpg` from `lib/store.js`; prompts in `docs/IMAGE_PROMPTS.md`.
 
@@ -23,6 +26,9 @@ BedPrince: bamboo bedding store. Static Next.js 15 site (`output:'export'`, `tra
 - Deploy: push to `main`; Cloudflare builds (`npm run build`, output `out`). If builds sit in "Queued", old queued deployments are blocking: cancel them in the dashboard.
 - Before committing: `npm test` and `npm run build` must pass.
 
+- New page: add it to `app/sitemap.js` (STATIC list) and give it `pageMeta()` with a trailing-slash `path`. New product image: also add the 640px `-sm.jpg` twin.
+- Unknown business details stay as visible `<Todo>` placeholders or empty `store.supportEmail` / `businessAddress` / `newsletterUrl`. Never invent an email, address, certification, customer name, star rating or review. Sample reviews must stay labelled as samples.
+
 ## Don't (gotchas)
 - Don't delete or move `functions/`. Without it checkout silently disappears (404).
 - Don't trust or send prices from the client. The client sends slug/option/qty only.
@@ -32,12 +38,13 @@ BedPrince: bamboo bedding store. Static Next.js 15 site (`output:'export'`, `tra
 - Don't switch to OpenNext/Worker/SSR; keep it a static export.
 - Don't call the Stripe API with a live key from scripts/tests. Use `sk_test_`.
 - `public/_headers` does not apply to Function responses; security headers are set in code in `checkout.js`. Keep them (there is intentionally no `X-Robots-Tag`).
-- `stripePaymentLink` in products is legacy and unused. Leave it.
+- `stripePaymentLink` in products IS used in MVP mode (single-product checkout and per-line "Buy this item"). Do not remove it until the `STRIPE_SECRET_KEY` TODO in README is done.
+- The shop is `/shop/`; `/products/` is only a legacy redirect page. Product URLs stay `/products/<slug>/`.
 
 ## Customization checklist
-1. Name/tagline/announcement: `lib/store.js`; title/metadata: `app/layout.js`.
+1. Name/tagline/announcement/support email/address: `lib/store.js`; default metadata: `app/layout.js`.
 2. Replace products in `lib/store.js`.
-3. Edit success page copy (keep `clearCart()`).
+3. Edit success page copy in `components/SuccessView.js` (keep `clearCart()`).
 4. Set `STRIPE_SECRET_KEY` (Production + Preview), redeploy.
 5. Custom domain in Cloudflare Pages (no code change needed).
 6. Already public: noindex removed (only `/cart/` keeps `robots: noindex`).

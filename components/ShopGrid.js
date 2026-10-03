@@ -37,7 +37,7 @@ export default function ShopGrid({ initialCategory = '' }) {
       </div>
       <p className="result-count" role="status" aria-live="polite">{list.length} product{list.length === 1 ? '' : 's'}</p>
       <div className="grid grid-3">
-        {list.map((p, i) => <ProductCard key={p.slug} product={p} priority={i < 3} />)}
+        {list.map((p, i) => <ProductCard key={p.slug} product={p} priority={i < 3} as="h2" />)}
       </div>
     </>
   );

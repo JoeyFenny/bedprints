@@ -7,7 +7,7 @@ import { addItem, openCart } from '../lib/cart';
 import Price from './Price';
 import Icon from './Icons';
 
-export default function ProductCard({ product, priority = false }) {
+export default function ProductCard({ product, priority = false, as: Heading = 'h3' }) {
   const [picking, setPicking] = useState(false);
   const [added, setAdded] = useState('');
   const href = `/products/${product.slug}/`;
@@ -47,7 +47,7 @@ export default function ProductCard({ product, priority = false }) {
         </div>
       </div>
       <div className="card-body">
-        <h3 className="card-title"><Link href={href}>{product.name}</Link></h3>
+        <Heading className="card-title"><Link href={href}>{product.name}</Link></Heading>
         <p className="card-blurb">{product.blurb}</p>
         <Price product={product} />
       </div>
