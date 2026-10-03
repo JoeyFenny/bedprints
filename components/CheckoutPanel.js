@@ -7,6 +7,7 @@ import { redirectToCheckout, paymentLinkFor } from '../lib/checkout';
 import { readNote } from '../lib/cart';
 import BagLines from './BagLines';
 import ShippingProgress from './ShippingProgress';
+import HandoffNotice from './HandoffNotice';
 
 // Subtotal + checkout button + friendly multi-product fallback. Used by the cart page and the drawer.
 // Renders the line list itself so it can attach per-line "Buy this item" buttons after a multi-product failure.
@@ -15,8 +16,14 @@ export default function CheckoutPanel({ items, subtotal, onNavigate, compact = f
   const [busyKey, setBusyKey] = useState('');
   const [error, setError] = useState('');
   const [perLine, setPerLine] = useState(false);
+  const [handoffKey, setHandoff] = useState(null); // key of the line about to go to a Stripe Payment Link (needs a heads-up first)
+  const handoff = handoffKey ? items.find((i) => i.key === handoffKey) || null : null;
 
-  async function checkout() {
+  function checkout() {
+    if (items.length === 1 && paymentLinkFor(items)) { setHandoff(items[0].key); return; }
+    goCheckout();
+  }
+  async function goCheckout() {
     setBusy(true);
     setError('');
     try {
@@ -27,11 +34,18 @@ export default function CheckoutPanel({ items, subtotal, onNavigate, compact = f
       setBusy(false);
     }
   }
-  async function buyLine(item) {
+  function buyLine(item) {
+    if (paymentLinkFor([item])) { setHandoff(item.key); return; }
+    goLine(item);
+  }
+  function continueHandoff() {
+    const link = paymentLinkFor([handoff]);
+    setBusyKey(handoff.key);
+    window.location.assign(link);
+  }
+  async function goLine(item) {
     setBusyKey(item.key);
     setError('');
-    const link = paymentLinkFor([item]);
-    if (link) { window.location.assign(link); return; }
     try {
       await redirectToCheckout([item]);
     } catch (e) {
@@ -50,7 +64,11 @@ export default function CheckoutPanel({ items, subtotal, onNavigate, compact = f
         <ShippingProgress subtotal={subtotal} />
         <div className="subtotal"><span>Subtotal</span><strong>{money(subtotal)}</strong></div>
         <p className="fine">Taxes and shipping are calculated at checkout.</p>
-        <button type="button" className="btn btn-block" disabled={busy} onClick={checkout}>{busy ? 'Redirecting to secure checkout…' : 'Checkout'}</button>
+        {handoff ? (
+          <HandoffNotice item={handoff} busy={Boolean(busyKey)} onContinue={continueHandoff} onCancel={() => { setHandoff(null); setBusyKey(''); }} />
+        ) : (
+          <button type="button" className="btn btn-block" disabled={busy} onClick={checkout}>{busy ? 'Redirecting to secure checkout…' : 'Checkout'}</button>
+        )}
         {error ? <p className={perLine ? 'notice' : 'notice error'} role="alert">{error}</p> : null}
         {showViewBag ? <Link href="/cart/" className="link-center" onClick={onNavigate}>View full bag</Link> : null}
         <p className="fine center">Secure checkout by Stripe. 30-night sleep trial.</p>

@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { money, store } from '../lib/store';
 import { addItem, openCart } from '../lib/cart';
-import { redirectToCheckout } from '../lib/checkout';
+import { redirectToCheckout, paymentLinkFor } from '../lib/checkout';
+import HandoffNotice from './HandoffNotice';
 import Price from './Price';
 import QtyStepper from './QtyStepper';
 import Icon from './Icons';
@@ -18,6 +19,7 @@ export default function BuyBox({ product }) {
   const [error, setError] = useState('');
   const [added, setAdded] = useState(false);
   const [stuck, setStuck] = useState(false);
+  const [handoff, setHandoff] = useState(false);
   const actions = useRef(null);
   const multi = product.options.length > 1;
 
@@ -40,7 +42,12 @@ export default function BuyBox({ product }) {
     setTimeout(() => setAdded(false), 2500);
     openCart();
   }
-  async function buyNow() {
+  function buyNow() {
+    // Payment Link mode: confirm size and quantity first, because Stripe asks again.
+    if (paymentLinkFor([{ slug: product.slug, option, qty }])) { setHandoff(true); return; }
+    goCheckout();
+  }
+  async function goCheckout() {
     setBusy(true);
     setError('');
     try {
@@ -61,7 +68,7 @@ export default function BuyBox({ product }) {
       {multi ? (
         <>
           <div className="opt-label" id="opt-label">
-            <span>{product.sizeGuide === 'pillow' ? 'Size' : product.slug.includes('throw') ? 'Color' : 'Size'}: <span className="opt-current">{option}</span></span>
+            <span>{product.optionLabel || 'Size'}: <span className="opt-current">{option}</span></span>
             {SIZE_GUIDES[product.sizeGuide] ? <Link href="/size-guide/">Size guide</Link> : null}
           </div>
           <div className="options" role="group" aria-labelledby="opt-label">
@@ -76,7 +83,14 @@ export default function BuyBox({ product }) {
         <QtyStepper value={qty} onChange={(q) => setQty(Math.max(1, q))} label="Quantity" />
         <button type="button" className="btn btn-lg grow" onClick={add}>{added ? <><Icon name="check" size={18} /> Added to bag</> : `Add to bag · ${money(product.price * qty)}`}</button>
       </div>
-      <button type="button" className="btn btn-outline btn-lg btn-block" disabled={busy} onClick={buyNow}>{busy ? 'Redirecting to secure checkout…' : 'Buy now'}</button>
+      {handoff ? (
+        <HandoffNotice item={{ slug: product.slug, name: product.name, option, qty }} busy={busy} onContinue={goCheckout} onCancel={() => setHandoff(false)} />
+      ) : (
+        <>
+          <button type="button" className="btn btn-outline btn-lg btn-block" disabled={busy} onClick={buyNow}>{busy ? 'Redirecting to secure checkout…' : 'Buy now'}</button>
+          <p className="fine center">Buy now opens Stripe&rsquo;s secure payment page. Add to bag keeps shopping.</p>
+        </>
+      )}
       {error ? <p className="notice error" role="alert">{error}</p> : null}
 
       <p className="shipinfo">
