@@ -131,12 +131,20 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 /* Hero */
 .hero { position: relative; color: #fff; min-height: clamp(520px, 78vh, 760px); display: flex; align-items: center; overflow: hidden; background: #1b1b1b; }
 .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
-.hero-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, .72) 0%, rgba(0, 0, 0, .45) 45%, rgba(0, 0, 0, .1) 100%); }
+.hero-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, .84) 0%, rgba(0, 0, 0, .68) 42%, rgba(0, 0, 0, .12) 100%); }
 .hero-copy { position: relative; padding-top: 64px; padding-bottom: 64px; }
 .hero-copy .display { color: #fff; max-width: 14ch; margin-bottom: 20px; }
 .hero-copy .lede { margin-bottom: 30px; max-width: 46ch; }
 .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
-@media (max-width: 700px) { .hero-shade { background: linear-gradient(180deg, rgba(0, 0, 0, .35), rgba(0, 0, 0, .7)); } .hero { min-height: 560px; align-items: flex-end; } }
+/* Phones: photo on top at its natural 16:9 (no heavy crop of a 1024px image), copy on black below: sharper and easier to read */
+@media (max-width: 700px) {
+  .hero { display: block; min-height: 0; background: #000; }
+  .hero-img { position: static; height: auto; aspect-ratio: 16 / 10; object-position: 62% 50%; }
+  .hero-shade { display: none; }
+  .hero-copy { padding-top: 28px; padding-bottom: 36px; }
+  .hero-copy .display { max-width: none; font-size: clamp(2.3rem, 11vw, 3rem); margin-bottom: 14px; }
+  .hero-copy .lede { margin-bottom: 22px; }
+}
 
 /* Trust bar */
 .trustbar { background: var(--paper); border-bottom: 1px solid var(--line); }

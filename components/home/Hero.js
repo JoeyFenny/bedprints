@@ -4,7 +4,7 @@ import { store } from '../../lib/store';
 export default function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-h">
-      <img className="hero-img" src="/images/hero-bedroom.jpg" alt="A bed dressed in soft sage bamboo bedding in morning light" width="1600" height="900" fetchPriority="high" decoding="async" />
+      <img className="hero-img" src="/images/hero-bedroom.jpg" srcSet="/images/hero-bedroom-sm.jpg 960w, /images/hero-bedroom.jpg 1600w" sizes="100vw" alt="A bed made with crisp white bedding, a tan lumbar pillow and a black slatted headboard in a bright bedroom" width="1600" height="900" fetchPriority="high" decoding="async" />
       <div className="hero-shade" />
       <div className="container hero-copy">
         <p className="kicker light">Bamboo viscose bedding</p>
