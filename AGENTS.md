@@ -27,7 +27,7 @@ BedPrince: bamboo bedding store. Static Next.js 15 site (`output:'export'`, `tra
 - Before committing: `npm test` and `npm run build` must pass.
 
 - New page: add it to `app/sitemap.js` (STATIC list) and give it `pageMeta()` with a trailing-slash `path`. New product image: also add the 640px `-sm.jpg` twin.
-- Unknown business details stay as visible `<Todo>` placeholders or empty `store.supportEmail` / `businessAddress` / `newsletterUrl`. Never invent an email, address, certification, customer name, star rating or review. Sample reviews must stay labelled as samples.
+- Unknown business details stay as visible `<Todo>` placeholders or empty `store.supportEmail` / `businessAddress` / `newsletterUrl`. Never invent an email, address, certification, customer name, star rating or review. Sample reviews must stay labelled as samples. Exception (self-audit): sample reviews, the newsletter forms and the contact form are now HIDDEN from shoppers unless `store.showSampleReviews`, `store.newsletterUrl` or `store.supportEmail` is set; the other `<Todo>` chips stay visible.
 
 ## Don't (gotchas)
 - Don't delete or move `functions/`. Without it checkout silently disappears (404).
@@ -48,3 +48,7 @@ BedPrince: bamboo bedding store. Static Next.js 15 site (`output:'export'`, `tra
 4. Set `STRIPE_SECRET_KEY` (Production + Preview), redeploy.
 5. Custom domain in Cloudflare Pages (no code change needed).
 6. Already public: noindex removed (only `/cart/` keeps `robots: noindex`).
+
+- Images: palette is black/white/bamboo tan, no sage. Pollinations now returns HTTP 402 (needs a key); the current photos were generated with the AI Horde anonymous queue (see docs/IMAGE_PROMPTS.md). They are AI concept images, not the real products. Regenerate or replace with real photos before claiming they depict the item.
+- Payment Links cannot be pre-filled with size/qty: `components/HandoffNotice.js` tells the shopper Stripe asks again. Keep it until Checkout Sessions (`STRIPE_SECRET_KEY`) are live.
+- See docs/SELF_AUDIT.md for open issues.

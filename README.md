@@ -33,6 +33,8 @@ docs/FEATURE_AUDIT.md   checklist of what top DTC bedding sites have, with final
 ```
 
 ### Business details that are still placeholders
+> Update (self-audit): sample reviews (`store.showSampleReviews`), newsletter forms (`store.newsletterUrl`) and the contact form (`store.supportEmail`) are hidden until configured. Payment Link handoff: see `components/HandoffNotice.js`. Open issues: `docs/SELF_AUDIT.md`.
+
 `lib/store.js` has `supportEmail`, `businessAddress`, `newsletterUrl` (all empty). While empty, the site shows visible yellow `[support email]` / `[business address]` markers and the email forms say signup is not open (nothing is collected). Fill them in and the markers become real mailto links. Policy pages (`app/shipping-returns`, `privacy`, `terms`) are drafts with `<Todo>` markers: search for `Todo` to find every open item. Reviews are labelled **sample** placeholders (`lib/content.js`); replace them with real ones, never invent customers or certifications.
 
 ## Architecture

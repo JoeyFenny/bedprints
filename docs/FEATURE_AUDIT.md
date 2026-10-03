@@ -151,3 +151,7 @@ Legend: ✅ done · 🟡 done with a caveat · ⛔ not feasible on a static site
 - Finished product dimensions for the size guide.
 - Photography: all photos are the existing AI-generated sage set; detail views are crops of them. Real photography would lift conversion.
 - Stripe: Payment Links carry one product at a time. Confirm in Stripe that each link allows adjustable quantity (the site passes size and quantity in `client_reference_id`, but cannot force the link's quantity). Set `STRIPE_SECRET_KEY` (see README TODO) to enable true multi-product checkout and order notes.
+
+
+## Update after self-audit
+See `docs/SELF_AUDIT.md`. Changes to rows above: sample reviews, newsletter forms and the contact form are hidden until configured (flags in `lib/store.js`); the checkout handoff explains that Stripe's Payment Link asks size/quantity again; shipping/tax-at-checkout claims were removed; all photos were regenerated in a black/white/tan palette.
