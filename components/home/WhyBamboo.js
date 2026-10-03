@@ -24,11 +24,11 @@ export default function WhyBamboo() {
           <p className="kicker">Bamboo vs cotton</p>
           <h2 id="cmp-h" className="h2">How bamboo viscose compares</h2>
           <div className="table-wrap">
-            <table className="table">
+            <table className="table stack">
               <caption className="sr-only">Comparison of bamboo viscose and typical cotton bedding</caption>
               <thead><tr>{comparison.head.map((h, i) => <th key={i} scope="col">{h || <span className="sr-only">Feature</span>}</th>)}</tr></thead>
               <tbody>
-                {comparison.rows.map(([a, b, c]) => <tr key={a}><th scope="row">{a}</th><td>{b}</td><td>{c}</td></tr>)}
+                {comparison.rows.map(([a, b, c]) => <tr key={a}><th scope="row">{a}</th><td data-label={comparison.head[1]}>{b}</td><td data-label={comparison.head[2]}>{c}</td></tr>)}
               </tbody>
             </table>
           </div>

@@ -15,7 +15,7 @@ export default function NotFound() {
         <Link href="/" className="btn btn-outline">Back to home</Link>
       </div>
       <div className="grid grid-3 left page-pad-top">
-        {products.slice(0, 3).map((p) => <ProductCard key={p.slug} product={p} />)}
+        {products.slice(0, 3).map((p) => <ProductCard key={p.slug} product={p} as="h2" />)}
       </div>
     </main>
   );

@@ -26,7 +26,7 @@ export default function ProductCard({ product, priority = false, as: Heading = '
     <article className="card">
       <div className="card-media">
         <Link href={href} className="card-link" tabIndex={-1} aria-hidden="true">
-          <img className="img-a" src={smallImage(first)} srcSet={`${smallImage(first)} 640w, ${first} 1200w`} sizes="(min-width: 1024px) 28vw, (min-width: 640px) 45vw, 92vw" width="640" height="640" alt="" loading={priority ? 'eager' : 'lazy'} decoding="async" />
+          <img className="img-a" src={smallImage(first)} srcSet={`${smallImage(first)} 640w, ${first} 1200w`} sizes="(min-width: 1024px) 28vw, (min-width: 640px) 45vw, 92vw" width="640" height="640" alt="" loading={priority ? 'eager' : 'lazy'} fetchPriority={priority ? 'high' : undefined} decoding="async" />
           {second ? <img className="img-b" src={smallImage(second)} width="640" height="640" alt="" loading="lazy" decoding="async" /> : null}
         </Link>
         <div className="card-badges">

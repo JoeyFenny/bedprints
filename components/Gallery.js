@@ -26,7 +26,7 @@ export default function Gallery({ images, name }) {
         ))}
       </div>
       <button type="button" className={`zoom${zoom ? ' on' : ''}`} onClick={() => setZoom(!zoom)} onMouseMove={move} onMouseLeave={() => setZoom(false)} aria-label={zoom ? 'Zoom out' : 'Zoom in on image'}>
-        <img src={images[i]} alt={label(i)} width="1200" height="1200" fetchPriority={i === 0 ? 'high' : undefined} decoding="async" style={zoom ? { transform: 'scale(2)', transformOrigin: origin } : undefined} />
+        <img src={images[i]} srcSet={`${smallImage(images[i])} 640w, ${images[i]} 1200w`} sizes="(min-width: 861px) 52vw, 100vw" alt={label(i)} width="1200" height="1200" fetchPriority={i === 0 ? 'high' : undefined} decoding="async" style={zoom ? { transform: 'scale(2)', transformOrigin: origin } : undefined} />
         {!zoom ? <span className="zoom-hint"><Icon name="zoom" size={16} /> Zoom</span> : null}
       </button>
     </div>
