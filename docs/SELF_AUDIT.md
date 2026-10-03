@@ -45,7 +45,10 @@ Technical / structural:
 11. Sitemap `lastmod` is the build time for every URL. `robots.txt` disallows `/cart/` and `/success/` which are also noindex (harmless). 404 canonical points to `/` (harmless).
 12. Images are 1024px sources upscaled to 1200px; fine for cards, a little soft when zoomed. Real photography would fix this.
 13. The Stripe page shows "Fenny Ventures, LLC" rather than BedPrince; branding and statement descriptor are set in the Stripe dashboard.
-14. No analytics/pixels (deferred; needs an account and a privacy-page update).
+14. **/shop/ mobile LCP is 3.5 s (Lighthouse perf 91, throttled slow-4G)**: the first card downloads the 1200px image (~914 KiB image-delivery saving over the page). Unchanged from before; fix by adding a ~900w variant to the card srcset or lowering `sizes`.
+15. No analytics/pixels (deferred; needs an account and a privacy-page update).
+
+Post-deploy Lighthouse (live, mobile): home 99 / LCP 2.2 s, product page 97 / LCP 2.6 s, shop 91 / LCP 3.5 s; accessibility, best-practices and SEO all 100, CLS 0. Desktop: 100 everywhere. Live deploy of the new images was verified byte-for-byte (md5) and the mobile menu, drawer and handoff notice were re-shot on the live site.
 
 ## Recommended next steps (in order)
 1. Fill in `supportEmail`, `businessAddress`, shipping/returns terms; finish policies (items 1, 7).
