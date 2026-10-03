@@ -114,3 +114,8 @@ Verify: `curl -i -X POST https://<your-site>/api/checkout -H 'content-type: appl
 ## Images
 
 Product photos live in `public/images/` and were AI-generated. Prompts are in [docs/IMAGE_PROMPTS.md](./docs/IMAGE_PROMPTS.md); regenerate better ones any time and overwrite the files (keep names, ~1200px square, under 300KB).
+
+
+## TODO (post-MVP): real multi-product checkout
+BedPrince currently runs in MVP mode: each product has a live Stripe Payment Link in `lib/store.js`, and a bag with ONE product line goes straight to it. A bag with several different products calls `/api/checkout`, which needs the `STRIPE_SECRET_KEY` secret.
+To finish: (1) in Stripe create a restricted key with only *Checkout Sessions: Write*; (2) in Cloudflare Pages project `bedprints` > Settings > Variables and Secrets add secret `STRIPE_SECRET_KEY`; (3) retry the deployment; (4) remove `paymentLinkFor()` in `lib/checkout.js` so every checkout uses one Checkout Session; (5) optionally archive the per-product Payment Links in Stripe.
