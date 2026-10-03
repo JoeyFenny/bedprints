@@ -108,3 +108,11 @@ test('placeholders: no invented support email anywhere in app/components', () =>
   }
   assert.equal(store.supportEmail, '');
 });
+
+test('self-audit: placeholders hidden by default, colour option is labelled, Stripe business name known', () => {
+  assert.equal(store.showSampleReviews, false);
+  assert.equal(findProduct('bamboo-throw-blanket').optionLabel, 'Color');
+  assert.ok(store.legalName);
+  const headers = fs.readFileSync(new URL('../public/_headers', import.meta.url), 'utf8');
+  assert.match(headers, /\/_next\/static\/\*\s+Cache-Control: public, max-age=31536000, immutable/);
+});
