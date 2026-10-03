@@ -10,7 +10,7 @@ export const metadata = pageMeta({ title: 'Contact us', description: 'Get in tou
 export default function ContactPage() {
   return (
     <PageShell title="Contact us" kicker="Help" intro="Questions about an order, sizing or care? We are happy to help." path="/contact/">
-      <div className="contact-grid">
+      <div className={store.supportEmail ? 'contact-grid' : ''}>
         <div className="prose">
           <h2>Email</h2>
           <p><SupportEmail subject="BedPrince question" /></p>
@@ -20,7 +20,7 @@ export default function ContactPage() {
           <h2>Before you write</h2>
           <p>Many answers are on the <a href="/faq/">FAQ</a> and <a href="/shipping-returns/">Shipping &amp; returns</a> pages. Include your order number if you have one.</p>
         </div>
-        <ContactForm />
+        {store.supportEmail ? <ContactForm /> : null}
       </div>
     </PageShell>
   );

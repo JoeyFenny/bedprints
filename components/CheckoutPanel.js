@@ -63,7 +63,7 @@ export default function CheckoutPanel({ items, subtotal, onNavigate, compact = f
       <div className="bag-foot">
         <ShippingProgress subtotal={subtotal} />
         <div className="subtotal"><span>Subtotal</span><strong>{money(subtotal)}</strong></div>
-        <p className="fine">Taxes and shipping are calculated at checkout.</p>
+        <p className="fine">Any shipping or taxes are shown on the secure checkout page before you pay.</p>
         {handoff ? (
           <HandoffNotice item={handoff} busy={Boolean(busyKey)} onContinue={continueHandoff} onCancel={() => { setHandoff(null); setBusyKey(''); }} />
         ) : (

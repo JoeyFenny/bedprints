@@ -14,7 +14,7 @@ export default function ShippingReturns() {
         <h2>Shipping</h2>
         <ul>
           <li><strong>Free US shipping</strong> on orders over $75.</li>
-          <li>Orders under $75: shipping is calculated at checkout.</li>
+          <li>Orders under $75: any shipping cost is shown on the secure checkout page before you pay.</li>
           <li>Processing time: <Todo>processing time, e.g. 1–3 business days</Todo></li>
           <li>Delivery time: <Todo>delivery estimate by region</Todo></li>
           <li>Carriers: <Todo>carrier names</Todo></li>
