@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { findProduct, products, categoryOf } from '../../../lib/store';
+import { findProduct, products, categoryOf, store, money } from '../../../lib/store';
 import { pageMeta, productLd, breadcrumbLd } from '../../../lib/seo';
 import BuyBox from '../../../components/BuyBox';
 import Gallery from '../../../components/Gallery';
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const p = findProduct(slug);
   if (!p) return { title: 'Not found' };
-  return pageMeta({ title: p.name, description: p.blurb + ' ' + p.highlights[0] + '.', path: `/products/${p.slug}/`, image: p.images[0], type: 'website' });
+  return pageMeta({ title: p.name, description: `${p.blurb} ${p.options.length > 1 ? `Available in ${p.options.join(', ')}. ` : ''}From ${money(p.price)}. Free US shipping over $75 and a 30-night sleep trial.`, path: `/products/${p.slug}/`, image: p.images[0], type: 'website' });
 }
 
 export default async function ProductPage({ params }) {
@@ -52,7 +52,7 @@ export default async function ProductPage({ params }) {
           <div className="grid grid-3">{pairs.map((p) => <ProductCard key={p.slug} product={p} />)}</div>
         </div>
       </section>
-      <SampleReviews heading="Reviews are coming soon" />
+      {store.showSampleReviews ? <SampleReviews heading="Reviews are coming soon" /> : null}
       <RecentlyViewed slug={product.slug} />
       <JsonLd data={productLd(product)} />
       <JsonLd data={breadcrumbLd(trail)} />

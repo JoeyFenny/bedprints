@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { products } from '../lib/store';
+import { products, store } from '../lib/store';
 import { faqs } from '../lib/content';
 import { pageMeta } from '../lib/seo';
 import ProductCard from '../components/ProductCard';
@@ -18,6 +18,8 @@ export const metadata = pageMeta({
   path: '/',
 });
 metadata.title = { absolute: 'BedPrince — Bamboo bedding that sleeps cool' };
+metadata.openGraph.title = 'BedPrince — Bamboo bedding that sleeps cool';
+metadata.twitter.title = 'BedPrince — Bamboo bedding that sleeps cool';
 
 export default function Home() {
   const best = products.filter((p) => p.bestSeller).slice(0, 4);
@@ -42,7 +44,7 @@ export default function Home() {
       <CategoryTiles />
       <WhyBamboo />
       <BundleBanner />
-      <SampleReviews heading="Reviews, coming soon" />
+      {store.showSampleReviews ? <SampleReviews heading="Reviews, coming soon" /> : null}
       <section className="section" aria-labelledby="faq-h">
         <div className="container narrow-lg">
           <p className="kicker">Questions</p>

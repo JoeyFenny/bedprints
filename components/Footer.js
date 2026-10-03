@@ -17,8 +17,7 @@ export default function Footer() {
         <div className="footer-brand">
           <Logo light />
           <p>{store.tagline} Silky, breathable bedding made from bamboo viscose.</p>
-          <h2 className="footer-h">Get news first</h2>
-          <NewsletterForm />
+          {store.newsletterUrl ? <><h2 className="footer-h">Get news first</h2><NewsletterForm /></> : null}
         </div>
         {cols.map((c) => (
           <nav key={c.title} aria-label={c.title}>

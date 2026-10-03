@@ -1,6 +1,10 @@
 import NewsletterForm from '../NewsletterForm';
 
+import { store } from '../../lib/store';
+
+// Hidden until a real signup endpoint exists (store.newsletterUrl): a dead "coming soon" form looks unfinished.
 export default function EmailCapture() {
+  if (!store.newsletterUrl) return null;
   return (
     <section className="section email" aria-labelledby="email-h">
       <div className="container narrow center">
