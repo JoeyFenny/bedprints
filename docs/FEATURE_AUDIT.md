@@ -5,6 +5,8 @@ Benchmark: Cozy Earth, Brooklinen, Boll & Branch. This is the common-denominator
 
 Legend: ✅ done · 🟡 done with a caveat · ⛔ not feasible on a static site (reason given) · ⏭ deferred (feasible, not worth it yet)
 
+**Final verification (2026-10-03):** `npm test` (29 tests incl. live smoke) and `npm run build` pass; axe-core finds 0 WCAG A/AA violations on home, shop, collection, product, cart, FAQ, contact, size guide and success; live checks of `/`, `/shop/`, a product page, `/faq/`, `/sitemap.xml`, `/robots.txt` all return 200 with expected content; `/products/` 301s to `/shop/`; unknown URLs return the 404 page; `POST /api/checkout` still responds (500 `missing_stripe_key` until the secret is set). Interactions (drawer, qty, remove, filters, sort, quick add, recently viewed, sticky bar, mobile menu, per-line Buy buttons) were exercised in headless Chrome.
+
 ## Global (every page)
 
 | Item | Before | Status | Notes |
