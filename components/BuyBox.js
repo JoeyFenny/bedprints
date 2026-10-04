@@ -42,6 +42,10 @@ export default function BuyBox({ product }) {
     setTimeout(() => setAdded(false), 2500);
     openCart();
   }
+  function pickSize() {
+    const el = document.getElementById('opt-label');
+    if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
   function buyNow() {
     // Payment Link mode: confirm size and quantity first, because Stripe asks again.
     if (paymentLinkFor([{ slug: product.slug, option, qty }])) { setHandoff(true); return; }
@@ -88,7 +92,7 @@ export default function BuyBox({ product }) {
       ) : (
         <>
           <button type="button" className="btn btn-outline btn-lg btn-block" disabled={busy} onClick={buyNow}>{busy ? 'Redirecting to secure checkout…' : 'Buy now'}</button>
-          <p className="fine center">Buy now opens Stripe&rsquo;s secure payment page. Add to bag keeps shopping.</p>
+          <p className="fine center buy-fine">Buy now opens Stripe&rsquo;s secure payment page. Add to bag keeps shopping.</p>
         </>
       )}
       {error ? <p className="notice error" role="alert">{error}</p> : null}
@@ -106,8 +110,9 @@ export default function BuyBox({ product }) {
       </ul>
 
       <div className={`sticky-atc${stuck ? ' show' : ''}`} aria-hidden={!stuck}>
-        <div className="sa-info"><span className="sa-name">{product.name}</span><span className="sa-sub">{multi ? `${option} · ` : ''}{money(product.price)}</span></div>
-        <button type="button" className="btn" tabIndex={stuck ? 0 : -1} onClick={add}>{added ? 'Added' : 'Add to bag'}</button>
+        <div className="sa-info"><span className="sa-price">{money(product.price)}</span><span className="sa-name">{product.name}</span></div>
+        {multi ? <button type="button" className="sa-size" tabIndex={stuck ? 0 : -1} onClick={pickSize} aria-label={`${product.optionLabel || 'Size'}: ${option}. Change`}>{option}<span className="chev" aria-hidden="true" /></button> : null}
+        <button type="button" className="btn sa-add" tabIndex={stuck ? 0 : -1} onClick={add}>{added ? 'Added' : 'Add to bag'}</button>
       </div>
     </div>
   );
