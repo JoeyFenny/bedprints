@@ -62,3 +62,58 @@ Post-deploy Lighthouse (live, mobile): home 99 / LCP 2.2 s, product page 97 / LC
 d174b65 UI fixes (menu, announcement, table, tap targets, contrast, 404, gallery srcset) | 3ea0fb9 checkout handoff notice | ce23c89 hide placeholders, OG/meta | e90aebc cache headers + test | 5815dc3 copy fix, hide contact form | 4449b83 hero rework | 677d3b7 regenerated images | e179623 docs notes | plus this file.
 
 Screenshots: `/workspace/bedprince-shots/before` and `/after`; headline pairs in `/workspace/bedprince-shots/` (`1-*`, `2-*`, `3-*`).
+
+
+---
+
+# Mobile redesign pass (4 Oct 2026)
+
+Trigger: "On mobile it looks like shit." Method: puppeteer-core + Chrome, iPhone Safari UA, touch, `deviceScaleFactor: 3`, at 390x844 and 430x932; home (every ~viewport slice), shop, two product pages, bag drawer, cart page, FAQ, About, menu, footer; `document.scrollWidth`, tap-target sizes and field font sizes measured in the page, hero text contrast measured from pixels. Before/after shots in `/workspace/bedprince-shots/mobile-v2/` (`before/`, `live1/`, `live2/`, final picks in the folder root). Scripts: `/workspace/tools/mobile-shots.mjs` (all pages + overflow/tap report), `inter2.mjs` (header hide, menu, quick add, sticky bar, swipe, drawer), `desk.mjs` (1440 regression). Stripe, Cloudflare dashboard and secrets untouched.
+
+## What was wrong (390px, before)
+
+| Problem | Detail |
+|---|---|
+| Home was 6,585 px tall (7.8 screens) | 4-up product grid collapsed to a long stack, 3 full-width category tiles (~1,000 px), 4 benefit blocks, a 10-block stacked comparison table, 3-up bundle thumbnails at ~100 px |
+| Chrome ate the first screen | 37 px announcement + 68 px header; header never got out of the way; hero was photo, then a separate black copy block, then two equal CTAs, then a 2x2 trust block: first screen had no product |
+| Quick add was a big white pill sitting on every product photo | covered the product on a 170 px-wide card |
+| Product page | square photo with 68 px thumbnails (not swipeable), 4-line description before the size chips, "Add to bag" and "Buy now" stacked with similar weight, a 4-row trust box plus a duplicate shipping paragraph, no add-to-cart in view on arrival; the sticky bar only appeared after scrolling past the buttons |
+| Cart drawer | right-hand drawer, 440 px max, header 28 px serif, close button 40 px; footer could grow taller than the screen when the Stripe hand-off notice opened |
+| Footer | three full link lists + brand + chips: ~1,100 px |
+| iOS details | `viewport-fit=cover` missing, so `env(safe-area-inset-*)` was always 0; form fields were 15 px (iOS zooms the page on focus); `vh` in hero and `#main`; `backdrop-filter` blur on the sticky header (scroll jank); `:hover` zoom effects stuck after a tap |
+| Tap targets | logo link 25 px high, announcement link 18 px, bag line names 19 px, breadcrumb links 43x29, quantity buttons 32-38 px, shop filter chips 38 px |
+| Shop | tall header + lede, wrapped filter chips, 15 px sort select |
+| Long text | About page was one long scroll; product description sat in front of the buy button |
+
+## What changed
+
+Phones (<=700 px for most things, <=860 px for product page/footer behaviour); desktop rules untouched. Code: `app/globals.css` (sections "Mobile v2, phase 1-4" at the end), `components/Gallery.js`, `BuyBox.js`, `FooterCols.js` (new), `Header.js`, `ProductCard.js`, `ProductDetails.js`, `app/about/page.js`, plus `snap-m` class additions on home/product/cart.
+
+- **Header**: 56 px (was 68), 44 px icon buttons, white and opaque (no blur), hides on scroll down and returns on any scroll up; the open menu is measured below it and is exempt (a transform/`will-change` on the header would trap the fixed menu again: see the CSS comment). Announcement is a full-width 44 px tap target.
+- **Hero**: one full-bleed photo (`min(74svh, 640px)`), copy over a bottom scrim (measured background luminance gives >= 6:1 behind the kicker and ~14:1 behind headline/lede), one primary tan CTA, the second action is a text link. Trust points are a swipeable single row.
+- **Home rhythm**: best sellers, categories and benefits are edge-to-edge scroll-snap carousels with a peeking next card; bundle thumbnails are a carousel; comparison table is label + two side-by-side columns; sections 44 px padding; 28 px h2s. Home is 4,750 px (-28%).
+- **Cards**: 2-up grid on shop/collections, quiet badges (sale badge dropped on phones, price shows the strike-through), 44 px round quick-add (single-option products add directly; multi-size opens a 2x2 chip sheet on the photo).
+- **Product page**: edge-to-edge swipe gallery (CSS scroll-snap, `scroll-snap-stop: always`, dots with 28x40 tap areas, 1/3 counter; desktop keeps thumbnails + zoom and loads the same first image URL), one-line pitch under the title with the full description in the accordion, size chips in an even grid (48 px), stepper + "Add to bag - $price" on one 56 px row, "Buy now" secondary, 2x2 perks without a box, duplicate shipping paragraph hidden. Sticky bar: price + name, size pill (scrolls to the chips) and Add to bag, with `env(safe-area-inset-bottom)`; it shows whenever the main buttons are off-screen (including on arrival) and the footer gets matching bottom padding.
+- **Bag**: bottom sheet (<=90dvh, rounded, grab handle), 76 px thumbs, 40 px steppers, 54 px Checkout, footer scrolls if the hand-off notice makes it tall, safe-area padding. Cart page tightened.
+- **Shop**: short page header, filter chips scroll horizontally (44 px), 44 px sort select.
+- **Footer**: brand line + three accordions (`FooterCols`, real buttons with `aria-expanded`; plain headings and always-open lists from 861 px) + scrolling payment chips: ~460 px closed.
+- **iOS/browser**: `viewportFit: 'cover'`, fields >= 16 px everywhere, `svh`/`dvh` with `vh` fallbacks, `touch-action: manipulation`, no tap highlight, hover effects only on `(hover: hover)`, `overscroll-behavior: contain` on carousels and the bag, `body { overflow-x: clip }` guard.
+- **About**: sections are accordions.
+
+## Bugs found while doing it (and fixed)
+
+1. `.sr-only` text inside a horizontally scrolling carousel is `position: absolute` and escaped the scroller, making the page 846 px wide (the whole mobile layout viewport widened). Fix: `.snap-m { position: relative }`. Check `document.documentElement.scrollWidth` after any new carousel.
+2. `will-change: transform` on the sticky header (added for the hide-on-scroll) made the open menu collapse again (same family as audit item 1). Removed; the header only has a transform while hidden, and never while the menu is open.
+3. `.pdp-gallery` kept its desktop `top: 76px` as `position: relative` on phones, pushing the photo 76 px down.
+
+## Verified
+
+- Live (https://bedprints.pages.dev) at 390 and 430: `scrollWidth == innerWidth` on home, shop, two products, drawer, cart, FAQ, About; no fields under 16 px on shop, cart, contact, home; header hides/returns; menu fills the screen below the header; swipe counter follows the scroll; "Add to bag" opens the sheet; 1440 desktop screenshots re-checked (home, product, shop, cart).
+- `npm test` 25 pass / 5 live skipped, `npm run build` ok.
+
+## Not done / ideas
+
+- No real-device test (iOS Safari toolbar collapse, rubber-banding, the 300 ms tap behaviour): everything above is Chrome emulation. Worth one check on Joey's phone.
+- Hero photo is a 1600x900 landscape AI image cropped to portrait (upscaled ~1.6x at 3x DPR); a portrait crop or real photo would be sharper.
+- Policy pages (privacy, terms, shipping) are still long prose; they could be accordions once the real text exists.
+- Header hide-on-scroll could also collapse the announcement bar permanently once dismissed.

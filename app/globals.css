@@ -721,3 +721,8 @@ body.menu-open .site-header { transform: none; transition: none; }
   .opt-label { margin: 14px 0 8px; }
   .crumbs a, .crumbs span { padding: 9px 0; }
 }
+
+/* Sticky bar: price, size pill, button. The product name is already on screen above, so it is dropped to keep three clear targets. */
+.sticky-atc .sa-name { display: none; }
+.sticky-atc .sa-price { font-size: 19px; }
+.sa-size { max-width: 150px; white-space: nowrap; overflow: hidden; }
