@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 // Live smoke tests. They only run when SITE_URL is set, e.g.
-//   SITE_URL=https://bedprints.pages.dev npm test
+//   SITE_URL=https://bedprince.pages.dev npm test
 const origin = process.env.SITE_URL;
 const opts = { skip: origin ? false : 'set SITE_URL to run live smoke tests' };
 

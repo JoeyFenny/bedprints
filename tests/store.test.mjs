@@ -63,7 +63,7 @@ test('helpers: save percent, small image, absolute url', () => {
   assert.equal(savePercent(findProduct('bamboo-pillow')), 0);
   assert.equal(smallImage('/images/a.jpg'), '/images/a-sm.jpg');
   assert.equal(smallImage('https://x.test/a.jpg'), 'https://x.test/a.jpg');
-  assert.equal(absoluteUrl('/shop/'), 'https://bedprints.pages.dev/shop/');
+  assert.equal(absoluteUrl('/shop/'), 'https://bedprince.pages.dev/shop/');
 });
 
 test('site content does not invent certifications or fake named reviews', async () => {
@@ -76,9 +76,9 @@ test('site content does not invent certifications or fake named reviews', async 
 test('SEO: sitemap lists every page, robots.txt points to it', async () => {
   const sitemap = (await import('../app/sitemap.js')).default();
   const urls = sitemap.map((s) => s.url);
-  for (const p of products) assert.ok(urls.includes(`https://bedprints.pages.dev/products/${p.slug}/`), p.slug);
-  for (const c of categories) assert.ok(urls.includes(`https://bedprints.pages.dev/collections/${c.slug}/`), c.slug);
-  for (const path of ['/', '/shop/', '/about/', '/faq/', '/shipping-returns/', '/size-guide/', '/contact/', '/privacy/', '/terms/']) assert.ok(urls.includes(`https://bedprints.pages.dev${path}`), path);
+  for (const p of products) assert.ok(urls.includes(`https://bedprince.pages.dev/products/${p.slug}/`), p.slug);
+  for (const c of categories) assert.ok(urls.includes(`https://bedprince.pages.dev/collections/${c.slug}/`), c.slug);
+  for (const path of ['/', '/shop/', '/about/', '/faq/', '/shipping-returns/', '/size-guide/', '/contact/', '/privacy/', '/terms/']) assert.ok(urls.includes(`https://bedprince.pages.dev${path}`), path);
   assert.ok(!urls.some((u) => /cart|success/.test(u)));
   assert.match(fs.readFileSync(new URL('../public/robots.txt', import.meta.url), 'utf8'), /^Sitemap: https:\/\/bedprints\.pages\.dev\/sitemap\.xml$/m);
 });
@@ -86,8 +86,8 @@ test('SEO: sitemap lists every page, robots.txt points to it', async () => {
 test('SEO helpers build canonical, OG, Twitter and JSON-LD', async () => {
   const { pageMeta, productLd, breadcrumbLd, faqLd, organizationLd } = await import('../lib/seo.js');
   const m = pageMeta({ title: 'Shop', description: 'd', path: '/shop/' });
-  assert.equal(m.alternates.canonical, 'https://bedprints.pages.dev/shop/');
-  assert.equal(m.openGraph.url, 'https://bedprints.pages.dev/shop/');
+  assert.equal(m.alternates.canonical, 'https://bedprince.pages.dev/shop/');
+  assert.equal(m.openGraph.url, 'https://bedprince.pages.dev/shop/');
   assert.equal(m.twitter.card, 'summary_large_image');
   assert.equal(pageMeta({ title: 'x', description: 'd', path: '/cart/', noindex: true }).robots.index, false);
   const ld = productLd(findProduct('bamboo-sheet-set'));

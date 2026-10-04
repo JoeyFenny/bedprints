@@ -4,4 +4,4 @@ Disallow: /cart/
 Disallow: /success/
 Disallow: /api/
 
-Sitemap: https://bedprints.pages.dev/sitemap.xml
+Sitemap: https://bedprince.pages.dev/sitemap.xml

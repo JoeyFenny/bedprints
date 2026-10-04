@@ -121,7 +121,7 @@ npm test      # catalog/SEO/content tests, Function + checkout-helper tests (moc
 npm run build # must produce out/
 ```
 
-`tests/live.test.mjs` hits the deployed site and is skipped unless `SITE_URL` is set (e.g. `SITE_URL=https://bedprints.pages.dev npm test`). No test calls Stripe.
+`tests/live.test.mjs` hits the deployed site and is skipped unless `SITE_URL` is set (e.g. `SITE_URL=https://bedprince.pages.dev npm test`). No test calls Stripe.
 
 ## Deploy
 
