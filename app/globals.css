@@ -641,3 +641,61 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 }
 
 .card-title a { display: inline-block; padding: 3px 0; }
+
+/* ---- Mobile v2, phase 4: bag drawer (bottom sheet), cart page, shop toolbar, content pages ---- */
+@media (max-width: 700px) {
+  .drawer { top: auto; left: 0; right: 0; width: 100%; max-height: 90vh; max-height: 90dvh; border-radius: 20px 20px 0 0; transform: translateY(100%); box-shadow: 0 -10px 40px rgba(0, 0, 0, .25); }
+  .drawer-root.open .drawer { transform: none; }
+  .drawer-head { position: relative; padding: 20px 8px 8px 20px; border-bottom: 0; }
+  .drawer-head::before { content: ''; position: absolute; top: 8px; left: 50%; width: 38px; height: 4px; margin-left: -19px; border-radius: 2px; background: #d6d2c6; }
+  .drawer-head h2 { font-size: 26px; }
+  .drawer .bag-scroll { overscroll-behavior: contain; }
+  .bag-lines li, .bag-lines.compact li { grid-template-columns: 76px 1fr auto; gap: 12px; padding: 14px 0; }
+  .bl-main { font-size: 13.5px; }
+  .bl-name { font-size: 15px; line-height: 1.25; }
+  .bl-controls { margin-top: 6px; gap: 4px; }
+  .bl-controls .stepper button { width: 40px; height: 40px; }
+  .bl-controls .link-btn { min-height: 40px; padding: 0 8px; }
+  .drawer .bag-foot { padding: 14px 20px calc(14px + env(safe-area-inset-bottom)); max-height: 62vh; max-height: 62dvh; overflow-y: auto; box-shadow: 0 -8px 20px rgba(0, 0, 0, .05); }
+  .ship-progress p { font-size: 13px; }
+  .subtotal { font-size: 17px; margin-top: 12px; }
+  .bag-foot .fine { font-size: 12px; margin: 4px 0 0; }
+  .bag-foot .btn-block { min-height: 54px; font-size: 16px; margin-top: 12px; }
+  .bag-foot .link-center { margin: 0; padding: 12px 0; font-size: 14px; }
+  .bag-foot .fine.center { margin-top: 0; }
+  .drawer-empty { padding: 40px 24px calc(40px + env(safe-area-inset-bottom)); }
+
+  /* Cart page */
+  .bag-page { gap: 20px; padding-bottom: 40px; }
+  .bag-foot { padding: 18px 18px; border-radius: 16px; }
+  .upsell { margin-top: 32px; padding-bottom: 48px; }
+  .empty-bag { padding: 36px 0 8px; }
+  .order-note { margin-top: 18px; }
+
+  /* Shop / collection: short header, swipeable filter chips, thumb-size sort */
+  .collection-head { padding: 6px 0 20px; margin-bottom: 14px; }
+  .collection-head .h1 { margin: 6px 0 6px; }
+  .collection-head .lede { font-size: 15px; line-height: 1.45; margin-bottom: 0; }
+  .toolbar { gap: 10px; padding-bottom: 12px; border-bottom: 0; }
+  .tabs { flex-wrap: nowrap; overflow-x: auto; margin: 0 -20px; padding: 0 20px 2px; width: calc(100% + 40px); scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { flex: none; min-height: 44px; padding: 0 20px; }
+  .sort { width: 100%; justify-content: space-between; }
+  .sort select { flex: 1; max-width: 220px; min-height: 44px; }
+  .result-count { margin: 4px 0 14px; }
+  .shop-body { padding-bottom: 48px; }
+  .grid { gap: 22px 12px; }
+
+  /* Info pages */
+  .prose-wrap { padding-top: 20px; }
+  .page-body { padding-bottom: 56px; }
+  .prose h2 { font-size: 26px; margin: 30px 0 10px; }
+  .prose h3 { font-size: 17px; }
+  .info-card { padding: 18px; }
+  .contact-form { padding: 20px; }
+  .section-head + .grid, .section-head + .snap-m { margin-top: 0; }
+}
+.about-acc summary { font-family: var(--font-serif); font-size: 1.5rem; }
+.about-acc details > :not(summary) { font-size: 1rem; }
+.about-cta { margin-top: 28px; }
+@media (max-width: 700px) { .about-acc summary { font-size: 1.35rem; } .about-cta .btn { width: 100%; } }
