@@ -23,12 +23,13 @@ export default function BuyBox({ product }) {
   const actions = useRef(null);
   const multi = product.options.length > 1;
 
-  // Sticky mobile bar appears once the main buttons scroll out of view.
+  // Sticky mobile bar appears whenever the main buttons are out of view.
   useEffect(() => {
     const el = actions.current;
     if (!el || !('IntersectionObserver' in window)) return undefined;
     const io = new IntersectionObserver(([e]) => {
-      const gone = !e.isIntersecting && e.boundingClientRect.top < 0;
+      // Phones: the bar shows whenever the main buttons are not on screen (below the fold on arrival, or scrolled past).
+      const gone = !e.isIntersecting;
       setStuck(gone);
       document.body.classList.toggle('has-sticky-atc', gone);
     });
@@ -67,7 +68,8 @@ export default function BuyBox({ product }) {
       {product.badge ? <span className="badge">{product.badge}</span> : null}
       <h1>{product.name}</h1>
       <Price product={product} size="lg" />
-      <p className="lede">{product.description}</p>
+      <p className="lede lede-full">{product.description}</p>
+      <p className="lede lede-short">{product.blurb}</p>
 
       {multi ? (
         <>

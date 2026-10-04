@@ -8,6 +8,10 @@ export default function ProductDetails({ product }) {
   const tables = product.sizeGuide === 'sheets' ? ['mattress'] : product.sizeGuide === 'duvet' ? ['duvet'] : product.sizeGuide === 'pillow' ? ['pillow'] : [];
   return (
     <div className="accordion">
+      <details className="desc-m">
+        <summary>Description</summary>
+        <p>{product.description}</p>
+      </details>
       <details open>
         <summary>Details</summary>
         <ul>{product.highlights.map((h) => <li key={h}>{h}</li>)}</ul>
