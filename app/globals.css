@@ -514,3 +514,81 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
   .trustbar svg { width: 20px; height: 20px; }
   .trustbar small { display: none; }
 }
+
+/* ---- Mobile v2, phase 2: home sections, cards, carousels, footer ---- */
+@media (max-width: 700px) {
+  /* Edge-to-edge swipeable rows (best sellers, categories, benefits, pairs-with, bundle) */
+  .snap-m { position: relative; display: flex !important; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin-left: -20px; margin-right: -20px; padding: 0 20px 6px; scroll-padding-left: 20px; scrollbar-width: none; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+  .snap-m::-webkit-scrollbar { display: none; }
+  .snap-m > * { flex: 0 0 62vw; max-width: 270px; min-width: 0; scroll-snap-align: start; }
+  .snap-m.tiles > * { flex-basis: 74vw; max-width: 320px; aspect-ratio: 4 / 5; }
+  .snap-m.benefits > * { flex-basis: 78vw; max-width: 320px; }
+  .snap-m.bundle-items > * { flex-basis: 40vw; max-width: 180px; }
+  .section-head { align-items: flex-end; margin-bottom: 0; }
+  .section-head .h2 { margin-bottom: 16px; }
+  .section-head .link-arrow { padding: 10px 0; margin-bottom: 6px; font-size: 14px; white-space: nowrap; }
+
+  /* Cards: quieter on a 2-up grid */
+  .card-media { border-radius: 12px; }
+  .card-badges { top: 8px; left: 8px; }
+  .badge { font-size: 10px; padding: 4px 8px; letter-spacing: .06em; }
+  .badge-sale { display: none; }
+  .card-body { padding-top: 10px; gap: 2px; }
+  .card-title { font-size: 14.5px; line-height: 1.3; }
+  .price { font-size: 14px; gap: 6px; }
+  /* Quick add becomes a 44px round button (no big pill over the photo); sizes open as a 2-up sheet on the image */
+  .quick { left: auto; right: 8px; bottom: 8px; }
+  .quick.open { left: 8px; }
+  .quick-btn { width: 44px; height: 44px; padding: 0; border-radius: 50%; }
+  .qa-text { display: none; }
+  .quick-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px; border-radius: 14px; }
+  .quick-opts button { min-height: 44px; padding: 8px; justify-content: center; }
+  .quick-opts .quick-x { grid-column: 1 / -1; margin: 0; min-height: 36px; background: transparent; }
+
+  .tile { aspect-ratio: 4 / 5; border-radius: 16px; }
+  .tile-label { left: 18px; right: 18px; bottom: 18px; }
+  .tile-label strong { font-size: 28px; }
+  .benefit { background: #131313; border: 1px solid #262626; border-radius: 16px; padding: 22px; }
+  .benefit h3 { font-size: 22px; }
+  .benefit p { font-size: 14.5px; margin: 0; }
+  .benefit svg { margin-bottom: 10px; }
+
+  /* Bamboo vs cotton: label, then two columns side by side (was a tall stack of 10 blocks) */
+  .table-wrap:has(.table.stack) { overflow: visible; }
+  .table.stack tr { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; overflow: hidden; padding: 0; }
+  .table.stack tbody th { grid-column: 1 / -1; padding: 10px 14px; font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--tan-ink); }
+  .table.stack td { display: block; padding: 12px 14px 14px; font-size: 14px; line-height: 1.4; }
+  .table.stack td + td { border-left: 1px solid var(--line); }
+  .table.stack td::before { display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+  .table.stack tr:last-child { border-bottom: 1px solid var(--line); }
+
+  .bundle { gap: 20px; }
+  .bundle-copy .btn { width: 100%; }
+  .bundle-items { grid-template-columns: none; }
+
+  .accordion summary { font-size: 16px; padding: 18px 36px 18px 0; min-height: 56px; display: flex; align-items: center; }
+  .accordion summary::after { right: 6px; }
+  .accordion details > :not(summary) { font-size: 15px; }
+  .email { text-align: left; }
+
+  /* Footer: brand line + accordion columns, compact legal row */
+  .site-footer { padding-top: 36px; font-size: 14px; padding-bottom: env(safe-area-inset-bottom); }
+  .footer-grid { display: block; }
+  .footer-brand p { margin: 12px 0 20px; font-size: 14px; }
+  .footer-col { border-top: 1px solid #262626; }
+  .footer-col:last-of-type { border-bottom: 1px solid #262626; }
+  .footer-h { margin: 0; }
+  .footer-h button { display: flex; width: 100%; justify-content: space-between; align-items: center; min-height: 54px; background: none; border: 0; padding: 0; color: var(--tan); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+  .footer-col .chev { width: 9px; height: 9px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg) translate(-2px, -2px); transition: transform .2s; margin-right: 4px; }
+  .footer-col.open .chev { transform: rotate(-135deg) translate(-2px, -2px); }
+  .footer-col ul { display: none; padding-bottom: 12px; }
+  .footer-col.open ul { display: grid; }
+  .site-footer li a { padding: 10px 0; }
+  .footer-bottom { margin-top: 0; border-top: 0; padding-top: 20px; padding-bottom: 28px; display: grid; gap: 14px; }
+  .pay-chips { flex-wrap: nowrap !important; overflow-x: auto; scrollbar-width: none; margin-left: -20px; margin-right: -20px; padding: 0 20px; }
+  .pay-chips::-webkit-scrollbar { display: none; }
+  .pay-chips li { white-space: nowrap; flex: none; }
+  .footer-bottom p { font-size: 12px; color: #8f8f8f; }
+}
+/* Footer link lists are always visible on wider screens, whatever the accordion state */
+@media (min-width: 861px) { .footer-col ul { display: grid !important; } .footer-h button { display: none; } }

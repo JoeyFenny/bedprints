@@ -18,7 +18,7 @@ export default function RecentlyViewed({ slug }) {
     <section className="section" aria-labelledby="rv-h">
       <div className="container">
         <h2 id="rv-h" className="h2">Recently viewed</h2>
-        <div className="grid grid-4">{list.map((p) => <ProductCard key={p.slug} product={p} />)}</div>
+        <div className="grid grid-4 snap-m">{list.map((p) => <ProductCard key={p.slug} product={p} />)}</div>
       </div>
     </section>
   );

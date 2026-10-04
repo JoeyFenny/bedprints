@@ -36,7 +36,7 @@ export default function Home() {
             </div>
             <Link href="/shop/" className="link-arrow">Shop all</Link>
           </div>
-          <div className="grid grid-4">
+          <div className="grid grid-4 snap-m">
             {best.map((p) => <ProductCard key={p.slug} product={p} />)}
           </div>
         </div>

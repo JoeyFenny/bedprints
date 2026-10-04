@@ -40,8 +40,8 @@ export default function ProductCard({ product, priority = false, as: Heading = '
               <button type="button" className="quick-x" aria-label="Cancel" onClick={() => setPicking(false)}><Icon name="close" size={16} /></button>
             </div>
           ) : (
-            <button type="button" className="quick-btn" onClick={() => setPicking(true)} aria-label={`Quick add ${product.name}`}>
-              {added ? <><Icon name="check" size={16} /> Added ({added})</> : <><Icon name="plus" size={16} /> Quick add</>}
+            <button type="button" className="quick-btn" onClick={() => (product.options.length > 1 ? setPicking(true) : quickAdd(product.options[0]))} aria-label={`Quick add ${product.name}`}>
+              {added ? <><Icon name="check" size={16} /> <span className="qa-text">Added ({added})</span></> : <><Icon name="plus" size={16} /> <span className="qa-text">Quick add</span></>}
             </button>
           )}
         </div>

@@ -32,7 +32,7 @@ export default function CartView() {
           <p className="lede">Add something soft and we will keep it here for you.</p>
           <Link href="/shop/" className="btn btn-lg">Shop bamboo bedding</Link>
         </div>
-        <div className="upsell"><h2 className="h2">Popular picks</h2><div className="grid grid-3">{products.filter((p) => p.bestSeller).slice(0, 3).map((p) => <ProductCard key={p.slug} product={p} />)}</div></div>
+        <div className="upsell"><h2 className="h2">Popular picks</h2><div className="grid grid-3 snap-m">{products.filter((p) => p.bestSeller).slice(0, 3).map((p) => <ProductCard key={p.slug} product={p} />)}</div></div>
       </>
     );
   }
@@ -50,7 +50,7 @@ export default function CartView() {
       </div>
       <div className="upsell">
         <h2 className="h2">You might also like</h2>
-        <div className="grid grid-3">{upsell.map((p) => <ProductCard key={p.slug} product={p} />)}</div>
+        <div className="grid grid-3 snap-m">{upsell.map((p) => <ProductCard key={p.slug} product={p} />)}</div>
       </div>
     </>
   );

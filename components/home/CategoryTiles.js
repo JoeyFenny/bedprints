@@ -7,7 +7,7 @@ export default function CategoryTiles() {
       <div className="container">
         <p className="kicker">Shop by category</p>
         <h2 id="cat-h" className="h2">Find your fit</h2>
-        <div className="grid grid-3 tiles">
+        <div className="grid grid-3 tiles snap-m">
           {categories.map((c) => (
             <Link key={c.slug} href={`/collections/${c.slug}/`} className="tile">
               <img src={c.image.replace(/\.jpg$/, '-sm.jpg')} alt="" width="640" height="640" loading="lazy" decoding="async" />

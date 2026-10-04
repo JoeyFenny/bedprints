@@ -49,7 +49,7 @@ export default async function ProductPage({ params }) {
         <div className="container">
           <p className="kicker">Complete the set</p>
           <h2 id="set-h" className="h2">Pairs well with</h2>
-          <div className="grid grid-3">{pairs.map((p) => <ProductCard key={p.slug} product={p} />)}</div>
+          <div className="grid grid-3 snap-m">{pairs.map((p) => <ProductCard key={p.slug} product={p} />)}</div>
         </div>
       </section>
       {store.showSampleReviews ? <SampleReviews heading="Reviews are coming soon" /> : null}

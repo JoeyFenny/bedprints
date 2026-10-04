@@ -8,7 +8,7 @@ export default function WhyBamboo() {
         <div className="container">
           <p className="kicker light">Why bamboo</p>
           <h2 id="why-h" className="h2">Bedding that is easy to sleep in</h2>
-          <div className="grid grid-4">
+          <div className="grid grid-4 snap-m benefits">
             {benefits.map((b) => (
               <div key={b.title} className="benefit">
                 <Icon name={b.icon} size={32} />

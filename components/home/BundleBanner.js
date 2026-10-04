@@ -14,7 +14,7 @@ export default function BundleBanner() {
           <p className="lede">Start with the sheet set, add matching pillowcases and a duvet cover. Spend over $75 and US shipping is free.</p>
           <Link href="/shop/" className="btn">Build your set</Link>
         </div>
-        <ul className="bundle-items">
+        <ul className="bundle-items snap-m">
           {items.map((p) => (
             <li key={p.slug}>
               <Link href={`/products/${p.slug}/`}>

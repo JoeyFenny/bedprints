@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { store } from '../lib/store';
 import Logo from './Logo';
+import FooterCols from './FooterCols';
 import NewsletterForm from './NewsletterForm';
 import Todo from './Todo';
 
@@ -19,12 +19,7 @@ export default function Footer() {
           <p>{store.tagline} Silky, breathable bedding made from bamboo viscose.</p>
           {store.newsletterUrl ? <><h2 className="footer-h">Get news first</h2><NewsletterForm /></> : null}
         </div>
-        {cols.map((c) => (
-          <nav key={c.title} aria-label={c.title}>
-            <h2 className="footer-h">{c.title}</h2>
-            <ul>{c.links.map(([label, href]) => <li key={href}><Link href={href}>{label}</Link></li>)}</ul>
-          </nav>
-        ))}
+        <FooterCols cols={cols} />
       </div>
       <div className="container footer-bottom">
         <ul className="pay-chips" aria-label="Payment and trust">
