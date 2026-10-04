@@ -80,7 +80,7 @@ test('SEO: sitemap lists every page, robots.txt points to it', async () => {
   for (const c of categories) assert.ok(urls.includes(`https://bedprince.pages.dev/collections/${c.slug}/`), c.slug);
   for (const path of ['/', '/shop/', '/about/', '/faq/', '/shipping-returns/', '/size-guide/', '/contact/', '/privacy/', '/terms/']) assert.ok(urls.includes(`https://bedprince.pages.dev${path}`), path);
   assert.ok(!urls.some((u) => /cart|success/.test(u)));
-  assert.match(fs.readFileSync(new URL('../public/robots.txt', import.meta.url), 'utf8'), /^Sitemap: https:\/\/bedprints\.pages\.dev\/sitemap\.xml$/m);
+  assert.match(fs.readFileSync(new URL('../public/robots.txt', import.meta.url), 'utf8'), /^Sitemap: https:\/\/bedprince\.pages\.dev\/sitemap\.xml$/m);
 });
 
 test('SEO helpers build canonical, OG, Twitter and JSON-LD', async () => {
