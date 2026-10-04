@@ -33,7 +33,8 @@ export const metadata = {
   robots: { index: true, follow: true },
 };
 
-export const viewport = { themeColor: '#000000', width: 'device-width', initialScale: 1 };
+// viewportFit 'cover' makes env(safe-area-inset-*) work on iPhones (notch, home indicator).
+export const viewport = { themeColor: '#000000', width: 'device-width', initialScale: 1, viewportFit: 'cover' };
 
 export default function RootLayout({ children }) {
   return (

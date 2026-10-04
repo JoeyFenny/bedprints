@@ -23,6 +23,22 @@ export default function Header() {
   const path = usePathname();
   const header = useRef(null);
   useEffect(() => { setMenu(false); }, [path]);
+  // Phones: the header slides away when scrolling down and returns on any upward scroll (more room to read, still one flick from the bag).
+  useEffect(() => {
+    let last = window.scrollY; let ticking = false;
+    const run = () => {
+      ticking = false;
+      const el = header.current; if (!el) return;
+      const y = Math.max(0, window.scrollY); const d = y - last;
+      if (document.body.classList.contains('menu-open')) { el.classList.remove('hide'); last = y; return; }
+      if (y < 80 || d < -6) el.classList.remove('hide');
+      else if (d > 8) el.classList.add('hide');
+      if (Math.abs(d) > 6 || y < 80) last = y;
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(run); } };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   useEffect(() => {
     document.body.classList.toggle('menu-open', menu);
     // The mobile menu is position:fixed below the header; measure instead of guessing the announcement height.
