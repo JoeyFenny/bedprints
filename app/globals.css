@@ -469,7 +469,9 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
    ========================================================================= */
 /* iOS Safari zooms the page when a focused field is under 16px */
 .sort select, .field input, .field select, .field textarea, .qty-input, .newsletter input { font-size: 16px; }
-.site-header { transition: transform .28s ease; will-change: transform; }
+.site-header { transition: transform .28s ease; }
+/* No will-change/transform while the menu is open: a transformed header would become the containing block of the fixed menu */
+body.menu-open .site-header { transform: none; transition: none; }
 .site-header.hide { transform: translateY(-100%); }
 @media (hover: hover) { .tile:hover img, .card:hover .img-a:only-of-type { transform: scale(1.04); } }
 @media (hover: none) { .tile:hover img, .card:hover .img-a:only-of-type { transform: none; } .card:hover .img-b { opacity: 0; } }
@@ -496,7 +498,7 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
   .logo-word { font-size: 25px; }
   .logo-mark { width: 22px; height: 22px; }
   .primary-nav.open { padding: 8px max(24px, env(safe-area-inset-left)) calc(32px + env(safe-area-inset-bottom)); }
-  .primary-nav a { font-size: 26px; padding: 18px 0; }
+  .primary-nav a { font-size: 26px; line-height: 1.2; padding: 18px 0; }
 
   /* Hero: one confident full-bleed photo, copy over a bottom scrim, one primary action */
   .hero { display: flex; align-items: flex-end; min-height: 0; height: 74vh; height: min(74svh, 640px); min-height: 480px; background: #111; }
@@ -699,3 +701,11 @@ body.menu-open .site-header { backdrop-filter: none; -webkit-backdrop-filter: no
 .about-acc details > :not(summary) { font-size: 1rem; }
 .about-cta { margin-top: 28px; }
 @media (max-width: 700px) { .about-acc summary { font-size: 1.35rem; } .about-cta .btn { width: 100%; } }
+
+/* Tap-target polish (phone) */
+@media (max-width: 700px) {
+  .announce a { padding: 10px 0; }
+  .announce { padding: 0 12px; }
+  .logo { padding: 10px 0; }
+  .bl-name { display: inline-block; padding: 5px 0; }
+}
